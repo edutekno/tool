@@ -233,6 +233,9 @@
         .tag-cloud .tag:hover {
             background-color: #5c49c7;
         }
+        .tag-cloud .tag:active {
+            background-color: #3b3a6c;
+        }
     </style>
 </head>
 <body>
@@ -308,7 +311,7 @@
                         max_tokens:1500,
                         messages: [
                             { "role": "system", "content": "You are a helpful asssitant. You can surf the internet to get actual information and will answer in clear and comprehensive answer. " },
-                            { 
+                            {  
                                 "role": "user", "content": tipe+prompt +'. Jawablah dengan teks bahasa Indonesia.)'
                             }
                         ]
@@ -343,28 +346,25 @@
         function showAlert2(tagNumber) {
             alert("Tag nomor " + tagNumber + " diklik!");
         }
-
         function showAlert(tagNumber) {
-    let msg = "";
-
-    if (tagNumber === 1) {
-        msg = "Tuliskan tujuan pembelajaran dan indikator belajar.";
-    } else if (tagNumber === 2) {
-        msg = "Tuliskan ide aktivitas pembelajaran kreatif inspiratif dan engaging, ";
-    } else if (tagNumber === 3) {
-        msg = "Tuliskan cara mengajarkan materi menjadi mudah dipahami (sertakan contoh dan analogi jika perlu).";
-    } else if (tagNumber === 4) {
-        msg = "Tuliskan 5 soal asesmen yang menantang. ";
-    } else if (tagNumber === 5) {
-        msg = "Tuliskan 5 pertanyaan yang menggugah dan memantik perhatian dalam mempelajari materi/topik pelajaran.";
-    } else {
-        msg = "";
-    }
-
-    alert(msg);
-    tipe=msg;
-    return msg;
-}
+            let msg = "";
+            if (tagNumber === 1) {
+                msg = "Tuliskan tujuan pembelajaran dan indikator belajar.";
+            } else if (tagNumber === 2) {
+                msg = "Tuliskan ide aktivitas pembelajaran kreatif inspiratif dan engaging, ";
+            } else if (tagNumber === 3) {
+                msg = "Tuliskan cara mengajarkan materi menjadi mudah dipahami (sertakan contoh dan analogi jika perlu).";
+            } else if (tagNumber === 4) {
+                msg = "Tuliskan 5 soal asesmen yang menantang. ";
+            } else if (tagNumber === 5) {
+                msg = "Tuliskan 5 pertanyaan yang menggugah dan memantik perhatian dalam mempelajari materi/topik pelajaran.";
+            } else {
+                msg = "Jelaskan dengan bahasa yang mudah dipahami mengenai hal ini: ";
+            }
+            alert(msg);
+            tipe=msg;
+            return msg;
+        }
     </script>
     <br>
     <p align="center" id="footer">Developed by <b>@mtamim</b></p>
