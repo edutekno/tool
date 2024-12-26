@@ -236,6 +236,9 @@
         .tag-cloud .tag:active {
             background-color: #3b3a6c;
         }
+        .tag-cloud .tag.active {
+            background-color: #ff7675;
+        }
     </style>
 </head>
 <body>
@@ -280,6 +283,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         var tipe;
+        var activeTag = null;
         function toggleNavbar() {
             var navbarNav = document.getElementById("navbarNav");
             navbarNav.classList.toggle("show");
@@ -359,9 +363,14 @@
             } else if (tagNumber === 5) {
                 msg = "Tuliskan 5 pertanyaan yang menggugah dan memantik perhatian dalam mempelajari materi/topik pelajaran.";
             } else {
-                msg = "Jelaskan dengan bahasa yang mudah dipahami mengenai hal ini: ";
+                msg = "";
             }
-            //alert(msg);
+            if (activeTag !== null) {
+                activeTag.classList.remove('active');
+            }
+            var tag = document.querySelector('.tag:nth-child(' + tagNumber + ')');
+            tag.classList.add('active');
+            activeTag = tag;
             tipe=msg;
             return msg;
         }
