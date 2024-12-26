@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Guide</title>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@12.0.4/dist/markdown-it.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f9f9f9;
+            font-family: Arial, sans-serif;
+            padding-top: 56px;
+            line-height: 1.6;
+            color: #333333;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            border: 1px solid #e0e0e0;
+        }
+        .card-header {
+            background-color: #6c5ce7;
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .btn-primary {
+            background-color: #ff7675;
+            color: #ffffff;
+        }
+        .btn-primary:hover {
+            background-color: #ff5252;
+        }
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            background-color: #ffffff;
+            color: #333333;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        #response {
+            transition: all 0.3s ease;
+        }
+        .navbar {
+            background-color: #6c5ce7;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-brand {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .navbar-nav {
+            display: flex;
+            list-style-type: none;
+        }
+        .nav-item {
+            margin-left: 20px;
+        }
+        .nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #ff7675;
+        }
+        .navbar-toggler {
+            display: none;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #6c5ce7;
+        }
+        h2 {
+            color: #6c5ce7;
+        }
+        b {
+            color: #ff7675;
+        }
+        strong {
+            color: #6c5ce7;
+        }
+        ul {
+            padding-inline-start: 10px;
+            padding-left: 20px;
+            list-style-position: outside;
+        }
+        ol {
+            padding-inline-start: 10px;
+            padding-left: 20px;
+            list-style-position: outside;
+        }
+        @media (max-width: 768px) {
+            .navbar-nav {
+                display: none;
+                width: 100%;
+                text-align: center;
+                padding-top: 10px;
+            }
+            .navbar-nav.show {
+                display: block;
+            }
+            .nav-item {
+                margin: 10px 0;
+            }
+            .navbar-toggler {
+                display: block;
+            }
+            .navbar {
+                flex-wrap: wrap;
+            }
+        }
+        .spinner {
+            border: 14px solid #f3f3f3;
+            border-top: 14px solid #6c5ce7;
+            border-radius: 50%;
+            width: 140px;
+            height: 140px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .centered {
+            position: fixed;
+            text-align: center;
+            top: 20%;
+            left: 30%;
+        }
+        .response-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 0;
+            margin-top: 20px;
+            position: relative;
+            border: 1px solid #e0e0e0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .response-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+        .response-card .window-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #6c5ce7;
+            color: #ffffff;
+            padding: 10px 15px;
+            border-radius: 8px 8px 0 0;
+        }
+        .response-card .window-header h3 {
+            color: #ffffff;
+            margin: 0;
+        }
+        .response-card .window-header .close-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #ffffff;
+            transition: color 0.3s ease;
+        }
+        .response-card .window-header .close-btn:hover {
+            color: #ff7675;
+        }
+        .response-card .content {
+            padding: 15px;
+        }
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .tag-cloud .tag {
+            background-color: #6c5ce7;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .tag-cloud .tag:hover {
+            background-color: #5c49c7;
+        }
+        .tag-cloud .tag:active {
+            background-color: #3b3a6c;
+        }
+        .tag-cloud .tag.active {
+            background-color: #ff7675;
+        }
+        .float-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ffa07a;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            display: none;
+        }
+        .float-button:hover {
+            background-color: #ff8c00;
+        }
+      
+  ol {
+    list-style-type: none; /* Menghilangkan tanda default */
+    padding-left: 20px; /* Indentasi dari kiri */
+}
+
+ol li {
+    position: relative; /* Posisi relatif untuk penempatan tanda */
+    padding-left: 25px; /* Jarak antara tanda dan teks */
+    margin-bottom: 10px; /* Jarak antar item */
+   margin-top: 10px; /* Jarak antar item */
+}
+
+ol li::before {
+    content: ""; /* Konten kosong untuk tanda */
+    position: absolute; /* Posisi absolut untuk tanda */
+    left: 0; /* Posisi tanda di sebelah kiri */
+    top: 10px; /* Posisi tanda di bagian atas */
+    width: 5px; /* Lebar tanda */
+    height: 5px; /* Tinggi tanda */
+    background-color: #000; /* Warna latar belakang tanda */
+}
+      
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a class="navbar-brand" href="#">BrainBot</a>
+        <button class="navbar-toggler" onclick="toggleNavbar()">☰</button>
+        <ul class="navbar-nav" id="navbarNav">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="spider.php">Spider</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="card">
+            
+            <div class="card-body">
+                <p align="center"> <img src="https://rumahguru.org/aibrain/brainbot-s.png" style="" > </p>
+                <form id="ai-form">
+                    <textarea class="form-control" id="prompt" rows="3" placeholder="Tuliskan topik materi..." required></textarea>
+                    <div class="tag-cloud">
+                        <div class="tag" onclick="showAlert(1)">Tujuan (TP)</div>
+                        <div class="tag" onclick="showAlert(2)">Aktivitas</div>
+                        <div class="tag" onclick="showAlert(3)">Cara Mengajar</div>
+                        <div class="tag" onclick="showAlert(4)">Asesmen</div>
+                        <div class="tag" onclick="showAlert(5)">Pemantik</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-4" style="width: 100%;">Kirim</button>
+                </form>
+                <div id="loading" align="center" class="centered" style="display:none;"><img src="https://rumahguru.org/img/loadingtech.gif" alt="LOADING" ><br>LOADING...</div>
+                <div id="response"></div>
+            </div>
+        </div>
+    </div>
+    <button class="float-button" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></button>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var tipe;
+        var activeTag = null;
+        function toggleNavbar() {
+            var navbarNav = document.getElementById("navbarNav");
+            navbarNav.classList.toggle("show");
+        }
+        $(document).ready(function() {
+            url = "https://api.cerebras.ai/v1/chat/completions";
+            apiKey = "csk-d3rmj2fyyr6cffe62xhpjkxy5d4fpvyftj5jh29hdhhcrmn2";
+            model="llama3.1-70b";
+            function decodeHtml(html) {
+                var txt = document.createElement("textarea");
+                txt.innerHTML = html;
+                return txt.value;
+            }
+            $('#ai-form').submit(function(e) {
+                e.preventDefault();
+                var prompt = $('#prompt').val();
+                document.getElementById("loading").style.display = "block";
+                var settings = {
+                    url: url,
+                    method: "POST",
+                    timeout: 0,
+                    headers: {
+                        "Authorization": "Bearer " + apiKey,
+                        "Content-Type": "application/json"
+                    },
+                    data: JSON.stringify({
+                        model: model,
+                        temperature:0.3,
+                        max_tokens:1500,
+                        messages: [
+                            { "role": "system", "content": "You are a helpful asssitant. You can surf the internet to get actual information and will answer in clear and comprehensive answer. " },
+                            {  
+                                "role": "user", "content": tipe+prompt +'. Jawablah dengan teks bahasa Indonesia.)'
+                            }
+                        ]
+                    })
+                };
+                $.ajax(settings).done(function(response) {
+                    const message = response.choices[0].message;
+                    const htmlText = window.markdownit().render(message.content);
+                    const botMessageHtml = htmlText.replace("```html", "");
+                    var newElement = $('<div class="response-card">' + 
+                        '<div class="window-header">' + 
+                        '<h3>AI</h3>' + 
+                        '<button class="close-btn" onclick="deleteElement(this)"><i class="fas fa-times"></i></button>' + 
+                        '</div>' + 
+                        '<div class="content">' + botMessageHtml + '</div>' + 
+                        '</div>');
+                    $('#response').append(newElement);
+                    document.getElementById("loading").style.display = "none";
+                    window.scrollTo({ left: 0, top: document.body.scrollHeight, behavior: "smooth" });
+                    checkScroll();
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                    $('#response').html('<div class="alert-custom" style="background-color: #ffcccc;">Error: ' + errorThrown + '</div>');
+                });
+            });
+        });
+        function deleteElement(button) {
+            var element = button.closest('.response-card');
+            element.remove();
+        }
+        function showAlert2(tagNumber) {
+            alert("Tag nomor " + tagNumber + " diklik!");
+        }
+        function showAlert(tagNumber) {
+            let msg = "";
+            if (tagNumber === 1) {
+                msg = "Tuliskan tujuan pembelajaran dan indikator belajar.";
+            } else if (tagNumber === 2) {
+                msg = "Tuliskan ide aktivitas pembelajaran kreatif inspiratif dan engaging, ";
+            } else if (tagNumber === 3) {
+                msg = "Tuliskan cara mengajarkan materi menjadi mudah dipahami (sertakan contoh dan analogi jika perlu).";
+            } else if (tagNumber === 4) {
+                msg = "Tuliskan 5 soal asesmen yang menantang dan dapat mengukur pengetahuan, keterampilan dan kemampuan siswa. ";
+            } else if (tagNumber === 5) {
+                msg = "Tuliskan 5 pertanyaan yang menggugah dan memantik perhatian dan motivasi siswa dalam mempelajari materi/topik pelajaran().";
+            } else {
+                msg = "";
+            }
+            if (activeTag !== null) {
+                activeTag.classList.remove('active');
+            }
+            var tag = document.querySelector('.tag:nth-child(' + tagNumber + ')');
+            tag.classList.add('active');
+            activeTag = tag;
+            tipe=msg;
+            return msg;
+        }
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        function checkScroll() {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                document.querySelector('.float-button').style.display = 'block';
+            } else {
+                document.querySelector('.float-button').style.display = 'none';
+            }
+        }
+        window.addEventListener('scroll', checkScroll);
+    </script>
+    <br>
+    <p align="center" id="footer">Developed by <b>@mtamim</b></p>
+</body>
+</html>
