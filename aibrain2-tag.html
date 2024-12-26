@@ -328,9 +328,34 @@
             var element = button.closest('.response-card');
             element.remove();
         }
-        function showAlert(tagNumber) {
+        function showAlert2(tagNumber) {
             alert("Tag nomor " + tagNumber + " diklik!");
         }
+
+        function showAlert(tagNumber) {
+    let msg = "";
+
+    if (tagNumber === 1) {
+        msg = "Nomor 1 diklik";
+    } else if (tagNumber === 2) {
+        msg = "Nomor 2 diklik";
+    } else if (tagNumber === 3) {
+        msg = "Nomor 3 diklik";
+    } else if (tagNumber === 4) {
+        msg = "Nomor 4 diklik";
+    } else if (tagNumber === 5) {
+        msg = "Nomor 5 diklik";
+    } else {
+        msg = "Tag nomor " + tagNumber + " diklik!";
+    }
+
+    alert(msg);
+    return msg;
+}
+
+
+
+        
     </script>
     <br>
     <p align="center" id="footer">Developed by <b>@mtamim</b></p>
