@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -31,6 +32,7 @@
             max-width: 900px;
             margin: 0 auto;
             padding: 20px;
+           background-color: WhiteSmoke
         }
 
         .card {
@@ -247,8 +249,8 @@ ol {
 ol li {
     position: relative; /* Posisi relatif untuk penempatan tanda */
     padding-left: 25px; /* Jarak antara tanda dan teks */
-    margin-bottom: 10px; /* Jarak antar item */
-      margin-top: 10px; /* Jarak antar item */
+    margin-bottom: 5px; /* Jarak antar item */
+      margin-top: 5px; /* Jarak antar item */
 
 }
 
@@ -256,9 +258,9 @@ ol li::before {
     content: ""; /* Konten kosong untuk tanda */
     position: absolute; /* Posisi absolut untuk tanda */
     left: 0; /* Posisi tanda di sebelah kiri */
-    top: 10; /* Posisi tanda di bagian atas */
-    width: 3px; /* Lebar tanda */
-    height: 3px; /* Tinggi tanda */
+    top: 15%; /* Posisi tanda di bagian atas */
+    width: 5px; /* Lebar tanda */
+    height: 5px; /* Tinggi tanda */
     background-color: #000; /* Warna latar belakang tanda */
 }
 
@@ -279,8 +281,8 @@ ol li::before {
         </ul>
     </nav>
 
-    <div class="container">
-        <div class="card">
+    <div class="container"style="background:honeydew">
+        <div class="card"  style="background:honeydew">
             <div class="card-body">
                 <img src="https://rumahguru.org/aibrain/brainbot-s.png" alt="BrainBot Logo" class="mx-auto mb-6 w-48">
                 
@@ -314,17 +316,17 @@ ol li::before {
                             Pemantik
                         </button>
                     </div>
-
-                    <button type="submit" class="btn-primary">
-                        <i class="fas fa-paper-plane"></i>
-                        Kirim Pertanyaan
-                    </button>
-                </form>
-
-                <div id="loading" class="loading-spinner" style="display:none;">
+ <div id="loading" class="loading-spinner" style="display:none;">
                     <img src="https://rumahguru.org/img/loadingtech.gif" alt="Loading">
                     <p class="text-center text-gray-600">Sedang memproses...</p>
                 </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                        Kirim 
+                    </button>
+                </form>
+
+               
 
                 <div id="response"></div>
             </div>
@@ -337,7 +339,7 @@ ol li::before {
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        var tipe;
+        var tipe="Jelaskan ";
         var activeTag = null;
 
         function showAlert(tagNumber) {
