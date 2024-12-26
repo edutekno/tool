@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainBot - AI Learning Assistant</title>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@12.0.4/dist/markdown-it.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4F46E5;
+            --secondary-color: #818CF8;
+            --accent-color: #6366F1;
+            --background-color: #F3F4F6;
+            --card-background: #FFFFFF;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+        }
+
+        body {
+            background-color: var(--background-color);
+            font-family: 'Inter', sans-serif;
+            padding-top: 70px;
+            line-height: 1.7;
+            color: var(--text-primary);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: var(--card-background);
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            border: 1px solid rgba(229, 231, 235, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .navbar {
+            background-color: var(--primary-color);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-brand i {
+            font-size: 28px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+            resize: vertical;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .tag {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .tag.active {
+            background-color: var(--accent-color);
+            box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .response-card {
+            background-color: var(--card-background);
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            margin-top: 25px;
+            overflow: hidden;
+            border: 1px solid rgba(229, 231, 235, 0.5);
+        }
+
+        .window-header {
+            background-color: var(--primary-color);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .window-header h3 {
+            color: white;
+            margin: 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .content {
+            padding: 20px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        .loading-spinner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            padding: 30px;
+        }
+
+        .loading-spinner img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+        }
+
+        .float-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--primary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .float-button:hover {
+            transform: translateY(-5px);
+            background-color: var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .tag-cloud {
+                gap: 8px;
+            }
+
+            .tag {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+
+
+ol {
+    list-style-type: none; /* Menghilangkan tanda default */
+    padding-left: 20px; /* Indentasi dari kiri */
+}
+
+ol li {
+    position: relative; /* Posisi relatif untuk penempatan tanda */
+    padding-left: 25px; /* Jarak antara tanda dan teks */
+    margin-bottom: 10px; /* Jarak antar item */
+      margin-top: 10px; /* Jarak antar item */
+
+}
+
+ol li::before {
+    content: ""; /* Konten kosong untuk tanda */
+    position: absolute; /* Posisi absolut untuk tanda */
+    left: 0; /* Posisi tanda di sebelah kiri */
+    top: 10; /* Posisi tanda di bagian atas */
+    width: 3px; /* Lebar tanda */
+    height: 3px; /* Tinggi tanda */
+    background-color: #000; /* Warna latar belakang tanda */
+}
+
+
+      
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-brain"></i>
+            BrainBot
+        </a>
+        <ul class="navbar-nav" id="navbarNav">
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="fas fa-home"></i> Home</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <img src="https://rumahguru.org/aibrain/brainbot-s.png" alt="BrainBot Logo" class="mx-auto mb-6 w-48">
+                
+                <form id="ai-form">
+                    <textarea 
+                        class="form-control" 
+                        id="prompt" 
+                        rows="4" 
+                        placeholder="Tuliskan topik materi yang ingin Anda eksplorasi..."
+                        required></textarea>
+
+                    <div class="tag-cloud">
+                        <button type="button" class="tag" onclick="showAlert(1)">
+                            <i class="fas fa-bullseye"></i>
+                            Tujuan (TP)
+                        </button>
+                        <button type="button" class="tag" onclick="showAlert(2)">
+                            <i class="fas fa-tasks"></i>
+                            Aktivitas
+                        </button>
+                        <button type="button" class="tag" onclick="showAlert(3)">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            Cara Mengajar
+                        </button>
+                        <button type="button" class="tag" onclick="showAlert(4)">
+                            <i class="fas fa-clipboard-check"></i>
+                            Asesmen
+                        </button>
+                        <button type="button" class="tag" onclick="showAlert(5)">
+                            <i class="fas fa-lightbulb"></i>
+                            Pemantik
+                        </button>
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                        Kirim Pertanyaan
+                    </button>
+                </form>
+
+                <div id="loading" class="loading-spinner" style="display:none;">
+                    <img src="https://rumahguru.org/img/loadingtech.gif" alt="Loading">
+                    <p class="text-center text-gray-600">Sedang memproses...</p>
+                </div>
+
+                <div id="response"></div>
+            </div>
+        </div>
+    </div>
+
+    <button class="float-button" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var tipe;
+        var activeTag = null;
+
+        function showAlert(tagNumber) {
+            let msg = "";
+            if (tagNumber === 1) {
+                msg = "Tuliskan tujuan pembelajaran dan indikator belajar.";
+            } else if (tagNumber === 2) {
+                msg = "Tuliskan ide aktivitas pembelajaran kreatif inspiratif dan engaging, ";
+            } else if (tagNumber === 3) {
+                msg = "Tuliskan cara mengajarkan materi menjadi mudah dipahami (sertakan contoh dan analogi jika perlu).";
+            } else if (tagNumber === 4) {
+                msg = "Tuliskan 5 soal asesmen yang menantang dan dapat mengukur pengetahuan, keterampilan dan kemampuan siswa. ";
+            } else if (tagNumber === 5) {
+                msg = "Tuliskan 5 pertanyaan yang menggugah dan memantik perhatian dan motivasi siswa dalam mempelajari materi/topik pelajaran().";
+            }
+
+            if (activeTag !== null) {
+                activeTag.classList.remove('active');
+            }
+            var tag = document.querySelector('.tag:nth-child(' + tagNumber + ')');
+            tag.classList.add('active');
+            activeTag = tag;
+            tipe = msg;
+            return msg;
+        }
+
+        $(document).ready(function() {
+            const url = "https://api.cerebras.ai/v1/chat/completions";
+            const apiKey = "csk-d3rmj2fyyr6cffe62xhpjkxy5d4fpvyftj5jh29hdhhcrmn2";
+            const model = "llama3.1-70b";
+
+            $('#ai-form').submit(function(e) {
+                e.preventDefault();
+                var prompt = $('#prompt').val();
+                $("#loading").show();
+
+                $.ajax({
+                    url: url,
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + apiKey,
+                        "Content-Type": "application/json"
+                    },
+                    data: JSON.stringify({
+                        model: model,
+                        temperature: 0.3,
+                        max_tokens: 1500,
+                        messages: [
+                            { 
+                                "role": "system", 
+                                "content": "You are a helpful assistant. You can surf the internet to get actual information and will answer in clear and comprehensive answer."
+                            },
+                            {  
+                                "role": "user",
+                                "content": tipe + prompt + '. Jawablah dengan teks bahasa Indonesia.)'
+                            }
+                        ]
+                    }),
+                    success: function(response) {
+                        const message = response.choices[0].message;
+                        const htmlText = window.markdownit().render(message.content);
+                        const botMessageHtml = htmlText.replace("```html", "");
+                        
+                        var newElement = $(`
+                            <div class="response-card">
+                                <div class="window-header">
+                                    <h3><i class="fas fa-robot"></i> AI Response</h3>
+                                    <button class="close-btn" onclick="deleteElement(this)">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div class="content">${botMessageHtml}</div>
+                            </div>
+                        `);
+                        
+                        $('#response').append(newElement);
+                        $("#loading").hide();
+                        window.scrollTo({ 
+                            top: document.body.scrollHeight, 
+                            behavior: "smooth" 
+                        });
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        $('#response').append(`
+                            <div class="response-card">
+                                <div class="window-header" style="background-color: #EF4444;">
+                                    <h3><i class="fas fa-exclamation-triangle"></i> Error</h3>
+                                </div>
+                                <div class="content">
+                                    <p>Maaf, terjadi kesalahan: ${errorThrown}</p>
+                                </div>
+                            </div>
+                        `);
+                        $("#loading").hide();
+                    }
+                });
+            });
+        });
+
+        function deleteElement(button) {
+            $(button).closest('.response-card').fadeOut(300, function() {
+                $(this).remove();
+            });
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                document.querySelector('.float-button').style.display = 'flex';
+            } else {
+                document.querySelector('.float-button').style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>
