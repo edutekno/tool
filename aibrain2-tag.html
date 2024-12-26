@@ -25,9 +25,17 @@
             background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
             margin-top: 20px;
             border: 1px solid #e0e0e0;
+        }
+        .card-header {
+            background-color: #6c5ce7;
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+        }
+        .card-body {
+            padding: 20px;
         }
         .btn {
             display: inline-block;
@@ -171,7 +179,7 @@
             background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            padding: 0;
             margin-top: 20px;
             position: relative;
             border: 1px solid #e0e0e0;
@@ -185,10 +193,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
             background-color: #6c5ce7;
             color: #ffffff;
-            padding: 10px;
+            padding: 10px 15px;
             border-radius: 8px 8px 0 0;
         }
         .response-card .window-header h3 {
@@ -206,9 +213,8 @@
         .response-card .window-header .close-btn:hover {
             color: #ff7675;
         }
-        .response-card p {
-            color: #333333;
-            line-height: 1.6;
+        .response-card .content {
+            padding: 15px;
         }
         .tag-cloud {
             display: flex;
@@ -247,20 +253,25 @@
     </nav>
     <div class="container">
         <div class="card">
-            <p align="center"> <img src="https://rumahguru.org/aibrain/brainbot-s.png" style="" > </p>
-            <form id="ai-form">
-                <textarea class="form-control" id="prompt" rows="3" placeholder="Tuliskan pertanyaan/instruksi Anda di sini..." required></textarea>
-                <div class="tag-cloud">
-                    <div class="tag" onclick="showAlert(1)">TP</div>
-                    <div class="tag" onclick="showAlert(2)">Aktivitas</div>
-                    <div class="tag" onclick="showAlert(3)">Cara Mengajar</div>
-                    <div class="tag" onclick="showAlert(4)">Asesmen</div>
-                    <div class="tag" onclick="showAlert(5)">Pemantik</div>
-                </div>
-                <button type="submit" class="btn btn-primary mt-4" style="width: 100%;">Kirim</button>
-            </form>
-            <div id="loading" align="center" class="centered" style="display:none;"><img src="https://rumahguru.org/img/loadingtech.gif" alt="LOADING" ><br>LOADING...</div>
-            <div id="response"></div>
+            <div class="card-header">
+                <h3>BrainBot</h3>
+            </div>
+            <div class="card-body">
+                <p align="center"> <img src="https://rumahguru.org/aibrain/brainbot-s.png" style="" > </p>
+                <form id="ai-form">
+                    <textarea class="form-control" id="prompt" rows="3" placeholder="Tuliskan pertanyaan/instruksi Anda di sini..." required></textarea>
+                    <div class="tag-cloud">
+                        <div class="tag" onclick="showAlert(1)">TP</div>
+                        <div class="tag" onclick="showAlert(2)">Aktivitas</div>
+                        <div class="tag" onclick="showAlert(3)">Cara Mengajar</div>
+                        <div class="tag" onclick="showAlert(4)">Asesmen</div>
+                        <div class="tag" onclick="showAlert(5)">Pemantik</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-4" style="width: 100%;">Kirim</button>
+                </form>
+                <div id="loading" align="center" class="centered" style="display:none;"><img src="https://rumahguru.org/img/loadingtech.gif" alt="LOADING" ><br>LOADING...</div>
+                <div id="response"></div>
+            </div>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -352,10 +363,6 @@
     alert(msg);
     return msg;
 }
-
-
-
-        
     </script>
     <br>
     <p align="center" id="footer">Developed by <b>@mtamim</b></p>
