@@ -239,6 +239,23 @@
         .tag-cloud .tag.active {
             background-color: #ff7675;
         }
+        .float-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ffa07a;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            display: none;
+        }
+        .float-button:hover {
+            background-color: #ff8c00;
+        }
     </style>
 </head>
 <body>
@@ -280,6 +297,7 @@
             </div>
         </div>
     </div>
+    <button class="float-button" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></button>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         var tipe;
@@ -335,9 +353,7 @@
                     $('#response').append(newElement);
                     document.getElementById("loading").style.display = "none";
                     window.scrollTo({ left: 0, top: document.body.scrollHeight, behavior: "smooth" });
-                    $('html, body').animate({
-                        scrollTop: $("#footer").offset().top
-                    }, 1000);
+                    checkScroll();
                 }).fail(function(jqXHR, textStatus, errorThrown) {
                     $('#response').html('<div class="alert-custom" style="background-color: #ffcccc;">Error: ' + errorThrown + '</div>');
                 });
@@ -374,6 +390,17 @@
             tipe=msg;
             return msg;
         }
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        function checkScroll() {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                document.querySelector('.float-button').style.display = 'block';
+            } else {
+                document.querySelector('.float-button').style.display = 'none';
+            }
+        }
+        window.addEventListener('scroll', checkScroll);
     </script>
     <br>
     <p align="center" id="footer">Developed by <b>@mtamim</b></p>
