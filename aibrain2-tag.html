@@ -256,6 +256,29 @@
         .float-button:hover {
             background-color: #ff8c00;
         }
+      
+  ol {
+    list-style-type: none; /* Menghilangkan tanda default */
+    padding-left: 20px; /* Indentasi dari kiri */
+}
+
+ol li {
+    position: relative; /* Posisi relatif untuk penempatan tanda */
+    padding-left: 25px; /* Jarak antara tanda dan teks */
+    margin-bottom: 10px; /* Jarak antar item */
+   margin-top: 10px; /* Jarak antar item */
+}
+
+ol li::before {
+    content: ""; /* Konten kosong untuk tanda */
+    position: absolute; /* Posisi absolut untuk tanda */
+    left: 0; /* Posisi tanda di sebelah kiri */
+    top: 10px; /* Posisi tanda di bagian atas */
+    width: 5px; /* Lebar tanda */
+    height: 5px; /* Tinggi tanda */
+    background-color: #000; /* Warna latar belakang tanda */
+}
+      
     </style>
 </head>
 <body>
@@ -276,9 +299,7 @@
     </nav>
     <div class="container">
         <div class="card">
-            <div class="card-header">
-                <h3>BrainBot</h3>
-            </div>
+            
             <div class="card-body">
                 <p align="center"> <img src="https://rumahguru.org/aibrain/brainbot-s.png" style="" > </p>
                 <form id="ai-form">
@@ -375,9 +396,9 @@
             } else if (tagNumber === 3) {
                 msg = "Tuliskan cara mengajarkan materi menjadi mudah dipahami (sertakan contoh dan analogi jika perlu).";
             } else if (tagNumber === 4) {
-                msg = "Tuliskan 5 soal asesmen yang menantang. ";
+                msg = "Tuliskan 5 soal asesmen yang menantang dan dapat mengukur pengetahuan, keterampilan dan kemampuan siswa. ";
             } else if (tagNumber === 5) {
-                msg = "Tuliskan 5 pertanyaan yang menggugah dan memantik perhatian dalam mempelajari materi/topik pelajaran(berikan tanda dengan huruf tebal di setiap soal, contoh label: *Soal 1* dst).";
+                msg = "Tuliskan 5 pertanyaan yang menggugah dan memantik perhatian dan motivasi siswa dalam mempelajari materi/topik pelajaran().";
             } else {
                 msg = "";
             }
