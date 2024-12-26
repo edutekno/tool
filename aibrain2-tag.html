@@ -261,7 +261,7 @@
                 <form id="ai-form">
                     <textarea class="form-control" id="prompt" rows="3" placeholder="Tuliskan pertanyaan/instruksi Anda di sini..." required></textarea>
                     <div class="tag-cloud">
-                        <div class="tag" onclick="showAlert(1)">TP</div>
+                        <div class="tag" onclick="showAlert(1)">Tujuan (TP)</div>
                         <div class="tag" onclick="showAlert(2)">Aktivitas</div>
                         <div class="tag" onclick="showAlert(3)">Cara Mengajar</div>
                         <div class="tag" onclick="showAlert(4)">Asesmen</div>
@@ -350,15 +350,15 @@
     if (tagNumber === 1) {
         msg = "Tuliskan tujuan pembelajaran dan indikator belajar.";
     } else if (tagNumber === 2) {
-        msg = "Nomor 2 diklik";
+        msg = "Tuliskan ide aktivitas pembelajaran kreatif inspiratif dan engaging, ";
     } else if (tagNumber === 3) {
-        msg = "Nomor 3 diklik";
+        msg = "Tuliskan cara mengajarkan materi menjadi mudah dipahami (sertakan contoh dan analogi jika perlu).";
     } else if (tagNumber === 4) {
-        msg = "Nomor 4 diklik";
+        msg = "Tuliskan 5 soal asesmen yang menantang. ";
     } else if (tagNumber === 5) {
-        msg = "Nomor 5 diklik";
+        msg = "Tuliskan 5 pertanyaan yang menggugah dan memantik perhatian dalam mempelajari materi/topik pelajaran.";
     } else {
-        msg = "Tag nomor " + tagNumber + " diklik!";
+        msg = "";
     }
 
     alert(msg);
