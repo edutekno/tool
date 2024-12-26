@@ -276,6 +276,7 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        var tipe;
         function toggleNavbar() {
             var navbarNav = document.getElementById("navbarNav");
             navbarNav.classList.toggle("show");
@@ -308,7 +309,7 @@
                         messages: [
                             { "role": "system", "content": "You are a helpful asssitant. You can surf the internet to get actual information and will answer in clear and comprehensive answer. " },
                             { 
-                                "role": "user", "content": prompt +'. Jawablah dengan teks bahasa Indonesia.)'
+                                "role": "user", "content": tipe+prompt +'. Jawablah dengan teks bahasa Indonesia.)'
                             }
                         ]
                     })
@@ -347,7 +348,7 @@
     let msg = "";
 
     if (tagNumber === 1) {
-        msg = "Nomor 1 diklik";
+        msg = "Tuliskan tujuan pembelajaran dan indikator belajar.";
     } else if (tagNumber === 2) {
         msg = "Nomor 2 diklik";
     } else if (tagNumber === 3) {
@@ -361,6 +362,7 @@
     }
 
     alert(msg);
+    tipe=msg;
     return msg;
 }
     </script>
