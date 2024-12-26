@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeacherBot - AI Learning Assistant</title>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@12.0.4/dist/markdown-it.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #227B94; /* Soft blue */
+            --secondary-color: #FF9933; /* Vibrant orange */
+            --background-color: #F2F2F2; /* Light gray */
+            --card-background: #FFFFFF; /* White */
+            --text-primary: #333333; /* Dark gray */
+            --text-secondary: #666666; /* Medium gray */
+        }
+
+        body {
+            background-color: var(--background-color);
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-primary);
+        }
+
+        .navbar {
+            background-color: var(--primary-color);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 15px 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-menu-button {
+            display: none;
+        }
+
+        .mobile-menu {
+            display: flex;
+            gap: 20px;
+        }
+
+        .mobile-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 16px;
+            background-color: var(--card-background);
+            color: var(--text-primary);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(255, 153, 51, 0.1);
+        }
+
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .tag {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .tag.active {
+            background-color: var(--secondary-color);
+            box-shadow: 0 4px 6px -1px rgba(255, 153, 51, 0.4);
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            background-color: #FF7F00; /* Darker orange */
+            transform: translateY(-2px);
+        }
+
+        .response-card {
+            background-color: var(--card-background);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-top: 16px;
+            overflow: hidden;
+            border: 1px solid #E5E7EB;
+        }
+
+        .window-header {
+            background-color: var(--primary-color);
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .window-header h3 {
+            color: white;
+            margin: 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .content {
+            padding: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        .loading-spinner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 24px;
+        }
+
+        .loading-spinner img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+        }
+
+        .float-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .float-button:hover {
+            transform: translateY(-5px);
+            background-color: #FF7F00; /* Darker orange */
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-button {
+                display: block;
+            }
+
+            .mobile-menu {
+                display: none;
+                flex-direction: column;
+                gap: 10px;
+                position: absolute;
+                top: 60px;
+                right: 20px;
+                background-color: var(--primary-color);
+                padding: 10px;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            }
+
+            .mobile-menu.active {
+                display: flex;
+            }
+        }
+      
+             ol {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+
+        ol li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+
+        ol li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 15%;
+            width: 5px;
+            height: 5px;
+            background-color: var(--accent-color); /* Warna orange */
+        }
+      
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-white text-xl font-bold">TeacherBot</a>
+            <button class="mobile-menu-button" onclick="toggleMenu()">
+                <i class="fas fa-bars text-white"></i>
+            </button>
+            <ul class="mobile-menu">
+                <li><a href="#" class="text-white">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 mt-16">
+        <div class="card bg-card-background p-6 rounded-lg shadow">
+        <!--    <img src="https://rumahguru.org/aibrain/brainbot-s.png" alt="TeacherBot Logo" class="mx-auto mb-6 w-48"> -->
+            
+            <form id="ai-form">
+                <textarea 
+                    class="form-control" 
+                    id="prompt" 
+                    rows="4" 
+                    placeholder="Tuliskan topik materi yang ingin Anda eksplorasi..."
+                    required></textarea>
+
+                <div class="tag-cloud">
+                    <button type="button" class="tag" onclick="showAlert(1)">
+                        <i class="fas fa-bullseye"></i>
+                        Tujuan (TP)
+                    </button>
+                    <button type="button" class="tag" onclick="showAlert(2)">
+                        <i class="fas fa-tasks"></i>
+                        Aktivitas
+                    </button>
+                    <button type="button" class="tag" onclick="showAlert(3)">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        Cara Mengajar
+                    </button>
+                    <button type="button" class="tag" onclick="showAlert(4)">
+                        <i class="fas fa-clipboard-check"></i>
+                        Asesmen
+                    </button>
+                    <button type="button" class="tag" onclick="showAlert(5)">
+                        <i class="fas fa-lightbulb"></i>
+                        Pemantik
+                    </button>
+                </div>
+
+                <div id="loading" class="loading-spinner" style="display:none;">
+                    <img src="https://rumahguru.org/img/loadingtech.gif" alt="Loading">
+                    <p class="text-center text-gray-600">Sedang memproses...</p>
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-paper-plane"></i>
+                    Kirim
+                </button>
+            </form>
+
+            <div id="response" class="mt-6"></div>
+        </div>
+    </div>
+
+    <button class="float-button" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var tipe = "Jelaskan ";
+        var activeTag = null;
+
+        function showAlert(tagNumber) {
+            let msg = "";
+            if (tagNumber === 1) {
+                msg = "Tuliskan tujuan pembelajaran dan indikator belajar.";
+            } else if (tagNumber === 2) {
+                msg = "Tuliskan ide aktivitas pembelajaran kreatif inspiratif dan engaging, ";
+            } else if (tagNumber === 3) {
+                msg = "Tuliskan cara mengajarkan materi menjadi mudah dipahami (sertakan contoh dan analogi jika perlu).";
+            } else if (tagNumber === 4) {
+                msg = "Tuliskan 5 soal asesmen yang menantang dan dapat mengukur pengetahuan, keterampilan dan kemampuan siswa. ";
+            } else if (tagNumber === 5) {
+                msg = "Tuliskan 5 pertanyaan yang menggugah dan memantik perhatian dan motivasi siswa dalam mempelajari materi/topik pelajaran().";
+            }
+
+            if (activeTag !== null) {
+                activeTag.classList.remove('active');
+            }
+            var tag = document.querySelector('.tag:nth-child(' + tagNumber + ')');
+            tag.classList.add('active');
+            activeTag = tag;
+            tipe = msg;
+            return msg;
+        }
+
+        function toggleMenu() {
+            document.querySelector('.mobile-menu').classList.toggle('active');
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        $(document).ready(function() {
+            const url = "https://api.cerebras.ai/v1/chat/completions";
+            const apiKey = "csk-d3rmj2fyyr6cffe62xhpjkxy5d4fpvyftj5jh29hdhhcrmn2";
+            const model = "llama3.1-70b";
+
+            $('#ai-form').submit(function(e) {
+                e.preventDefault();
+                var prompt = $('#prompt').val();
+                $("#loading").show();
+
+                $.ajax({
+                    url: url,
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + apiKey,
+                        "Content-Type": "application/json"
+                    },
+                    data: JSON.stringify({
+                        model: model,
+                        temperature: 0.3,
+                        max_tokens: 1500,
+                        messages: [
+                            { 
+                                "role": "system", 
+                                "content": "You are a helpful assistant. You can surf the internet to get actual information and will answer in clear and comprehensive answer."
+                            },
+                            {  
+                                "role": "user",
+                                "content": tipe + prompt + '. Jawablah dengan teks bahasa Indonesia.)'
+                            }
+                        ]
+                    }),
+                    success: function(response) {
+                        const message = response.choices[0].message;
+                        const htmlText = window.markdownit().render(message.content);
+                        const botMessageHtml = htmlText.replace("```html", "");
+                        
+                        var newElement = $(`
+                            <div class="response-card">
+                                <div class="window-header">
+                                    <h3><i class="fas fa-robot"></i> AI Response</h3>
+                                    <button class="close-btn" onclick="deleteElement(this)">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div class="content">${botMessageHtml}</div>
+                            </div>
+                        `);
+                        
+                        $('#response').append(newElement);
+                        $("#loading").hide();
+                        window.scrollTo({ 
+                            top: document.body.scrollHeight, 
+                            behavior: "smooth" 
+                        });
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        $('#response').append(`
+                            <div class="response-card">
+                                <div class="window-header" style="background-color: #EF4444;">
+                                    <h3><i class="fas fa-exclamation-triangle"></i> Error</h3>
+                                </div>
+                                <div class="content">
+                                    <p>Maaf, terjadi kesalahan: ${errorThrown}</p>
+                                </div>
+                            </div>
+                        `);
+                        $("#loading").hide();
+                    }
+                });
+            });
+        });
+
+        function deleteElement(button) {
+            $(button).closest('.response-card').fadeOut(300, function() {
+                $(this).remove();
+            });
+        }
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                document.querySelector('.float-button').style.display = 'flex';
+            } else {
+                document.querySelector('.float-button').style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>
