@@ -74,13 +74,14 @@
         }
 
         .tag {
-            background-color: var(--primary-color);
+            background-color: #58b5cf;
+
             color: white;
             padding: 8px 16px;
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-weight: 500;
+            font-weight: 300;
             border: none;
             display: flex;
             align-items: center;
@@ -251,7 +252,7 @@
             content: "";
             position: absolute;
             left: 0;
-            top: 7%;
+            top: 15%;
             width: 5px;
             height: 5px;
             background-color: var(--secondary-color); /* Warna orange */
@@ -350,7 +351,7 @@
             } else if (tagNumber === 5) {
                 msg = "Tuliskan 5 pertanyaan yang menggugah dan memantik perhatian dan motivasi siswa dalam mempelajari materi/topik pelajaran(buat pertanyaannya ringkas jelas dengan teks tebal).";
             } else if (tagNumber === 6) {
-                msg = "Jelaskan ringkasan materi/topik dengan ringkas dan sejelas-jelasnya dari konsep dasar, contoh dan analogi serta informasi penting.";
+                msg = "Jelaskan ringkasan materi/topik dengan ringkas dan sejelas-jelasnya dari konsep dasar, contoh dan analogi.";
             }
 
             if (activeTag !== null) {
