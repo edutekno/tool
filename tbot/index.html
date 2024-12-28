@@ -351,6 +351,9 @@
                     <button type="button" class="tag" onclick="showAlert(6)">
                         <i class="fas fa-book"></i>
                         Ringkasan
+                    <button type="button" class="tag" onclick="showAlert(7)">
+                        <i class="fas fa-book"></i>
+                        Tanya-Jawab (FAQ)
                     </button>
                 </div>
 
@@ -393,6 +396,11 @@
             } else if (tagNumber === 6) {
                 msg = "Jelaskan ringkasan materi/topik dengan ringkas dan sejelas-jelasnya dari konsep dasar, contoh dan analogi.";
             }
+
+             else if (tagNumber === 7) {
+                msg = "Tuliskan pertanyaan yang sering diajukan siswa ttg topik materi pembelajaran beserta jawabannya. ";
+            }
+
 
             if (activeTag !== null) {
                 activeTag.classList.remove('active');
