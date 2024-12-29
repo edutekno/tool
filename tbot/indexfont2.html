@@ -32,7 +32,7 @@
             font-family: 'Merriweather', serif;
             font-weight: 700;
             color: var(--primary-color); /* Warna primary untuk teks bold */
-            background-color: #E5F3FD;
+           background-color: #E5F3FD;
         }
 
         .navbar {
@@ -269,6 +269,13 @@
             margin-top: 5px;
         }
 
+        ul li {
+            position: relative;
+            padding-left: 15px;
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+
         ol li::before {
             content: "";
             position: absolute;
@@ -280,7 +287,17 @@
             vertical-align: top;
         }
 
-        .bottom-bar {
+         ul li::before {
+            content: "";
+            position: absolute;
+            left: 25;
+            top: 15%;
+            width: 1px;
+            height: 1px;
+            background-color: var(--primary-color); /* Warna orange */
+            vertical-align: top;
+        }
+      .bottom-bar {
             position: fixed;
             bottom: 0;
             left: 0;
@@ -412,8 +429,9 @@
     </div>
 
     <div class="bottom-bar">
-        <a href="#"><i class="fas fa-home"></i>Home</a>
-        <a href="#"><i class="fas fa-book"></i>Materi</a>
+            <a href="#" onclick="scrollToTop()"><i class="fas fa-arrow-down"></i>Ke Bawah</a>
+      <!--  <a href="#"><i class="fas fa-home"></i>Home</a>
+       <a href="#"><i class="fas fa-book"></i>Materi</a> -->
         <a href="#"><i class="fas fa-question-circle"></i>Bantuan</a>
         <a href="#"><i class="fas fa-user"></i>Profil</a>
         <a href="#" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i>Ke Atas</a>
@@ -441,7 +459,7 @@
             }
 
              else if (tagNumber === 7) {
-                msg = "Tuliskan pertanyaan yang sering diajukan siswa ttg topik materi pembelajaran beserta jawabannya. ";
+                msg = "Tuliskan pertanyaan yang sering diajukan siswa ttg topik materi pembelajaran (dengan format teks tebal) dan tuliskan jawabannya.tulis nomornya. ";
             }
 
 
