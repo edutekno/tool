@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@12.0.4/dist/markdown-it.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-color: #227B94; /* Soft blue */
@@ -20,12 +20,12 @@
 
         body {
             background-color: var(--background-color);
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Roboto', sans-serif;
             color: var(--text-primary);
         }
 
         h1, h2, h3, h4, h5, h6 {
-            font-family: 'Merriweather', serif;
+            font-family: 'Roboto Slab', serif;
         }
 
         .navbar {
@@ -184,7 +184,7 @@
 
         .float-button {
             position: fixed;
-            bottom: 20px;
+            bottom: 80px; /* Adjusted to avoid overlap with bottom bar */
             left: 50%;
             transform: translateX(-50%);
             background-color: var(--secondary-color);
@@ -268,7 +268,7 @@
             margin-bottom: 0.5em;
             font-weight: 600;
             text-align: center;
-            font-family: 'Merriweather', serif;
+            font-family: 'Roboto Slab', serif;
             text-transform: uppercase;
             letter-spacing: 2px;
         }
@@ -311,6 +311,7 @@
             justify-content: space-around;
             padding: 10px 0;
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
         }
 
         .bottom-bar a {
@@ -320,11 +321,21 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            transition: all 0.3s ease;
         }
 
         .bottom-bar a i {
             font-size: 20px;
             margin-bottom: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .bottom-bar a:hover {
+            color: var(--secondary-color);
+        }
+
+        .bottom-bar a:hover i {
+            transform: translateY(-5px);
         }
 
         .copy-button {
@@ -338,10 +349,12 @@
             align-items: center;
             gap: 8px;
             margin-top: 16px;
+            transition: all 0.3s ease;
         }
 
         .copy-button:hover {
             background-color: #FF7F00;
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -586,7 +599,6 @@
                 document.querySelector('.float-button').style.display = 'none';
             }
         };
-    </script>
-<br>
+    </script><br><br>
 </body>
 </html>
