@@ -411,6 +411,10 @@
                         <i class="fas fa-book"></i>
                         Tanya-Jawab (FAQ)
                     </button>
+                    <button type="button" class="tag" onclick="showAlert(8)">
+                        <i class="fas fa-book"></i>
+                        Latihan
+                    </button>
                 </div>
 
                 <div id="loading" class="loading-spinner" style="display:none;">
@@ -447,7 +451,7 @@
             if (tagNumber === 1) {
                 msg = "Tuliskan tujuan pembelajaran dan indikator belajar.";
             } else if (tagNumber === 2) {
-                msg = "Tuliskan salah satu ide aktivitas pembelajaran dimulai dari pengenalan-pemahaman konsep, pendalaman, penerapan/aplikasi dan ide materi lanjutan. Fokuskan pada masalah belajar atau kesalahan konsep yang sering dihadapi siswa.";
+                msg = "Tuliskan salah satu ide aktivitas pembelajaran yang runtut dimulai dari pengenalan-pemahaman konsep, pendalaman, penerapan/aplikasi dan ide materi lanjutan. Fokuskan pada masalah belajar atau kesalahan konsep yang sering dihadapi siswa.";
             } else if (tagNumber === 3) {
                 msg = "Tuliskan cara mengajarkan materi menjadi mudah dipahami (sertakan contoh dan analogi jika perlu).";
             } else if (tagNumber === 4) {
@@ -457,8 +461,11 @@
             } else if (tagNumber === 6) {
                 msg = "Jelaskan ringkasan materi/topik dengan ringkas dan sejelas-jelasnya dari konsep dasar, contoh dan analogi.";
             }
+                else if (tagNumber === 7) {
+                msg = "Buatkan 7soal latihan untuk pengertian dan pemahaman.";
+            }
 
-             else if (tagNumber === 7) {
+             else if (tagNumber === 8) {
                 msg = "Tuliskan pertanyaan yang sering diajukan siswa ttg topik materi pembelajaran (dengan format teks tebal) dan tuliskan jawabannya.tulis nomornya. ";
             }
 
