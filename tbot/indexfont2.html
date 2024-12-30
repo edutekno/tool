@@ -478,7 +478,7 @@
             }
 
              else if (tagNumber === 8) {
-                msg = "Buatkan 7 soal latihan untuk pengertian dan pemahaman.";
+                msg = "Buatkan 7 soal latihan untuk pengertian dan pemahaman. dengan format isi seperti study flashcard";
 
              }
 
@@ -605,6 +605,25 @@
                 alert('Gagal menyalin teks: ', err);
             });
         }
+
+    function createResponseCard(title, konten) {
+    var newElement = $(`
+        <div class="response-card">
+            <div class="window-header">
+                <h3><i class="fas fa-robot"></i> ${title}</h3>
+                <button class="close-btn" onclick="deleteElement(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="content">${konten}</div>
+            <button class="copy-button" onclick="copyToClipboard(this)" align="center">
+                <i class="fas fa-copy"></i> Salin
+            </button><br>
+        </div>
+    `);
+
+    $('#response').append(newElement);
+}
 
         window.onscroll = function() {
             const bottomBar = document.querySelector('.bottom-bar');
