@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuruBot - AI Learning Assistant</title>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@12.0.4/dist/markdown-it.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #227B94; /* Soft blue */
+            --secondary-color: #FF9933; /* Vibrant orange */
+            --background-color: #F2F2F2; /* Light gray */
+            --card-background: #FFFFFF; /* White */
+            --text-primary: #333333; /* Dark gray */
+            --text-secondary: #666666; /* Medium gray */
+        }
+
+        body {
+            background-color: var(--background-color);
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-primary);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Merriweather', serif;
+        }
+
+        p {
+          padding-top: 1em;
+        }
+
+        strong, b {
+            padding-top: 5px;
+            font-family: 'Merriweather', serif;
+            font-weight: 700;
+            color: var(--primary-color); /* Warna primary untuk teks bold */
+           background-color: #fbfcbc;
+        }
+
+        .navbar {
+            background-color: var(--primary-color);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 15px 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-menu-button {
+            display: none;
+        }
+
+        .mobile-menu {
+            display: flex;
+            gap: 20px;
+        }
+
+        .mobile-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 8px; /* Padding lebih kecil */
+            background-color: var(--card-background);
+            color: var(--text-primary);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(255, 153, 51, 0.1);
+        }
+
+        .tag-cloud {
+            display: none;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .tag {
+            background-color: #58b5cf;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 300;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+        }
+
+        .tag:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .tag.active {
+            background-color: var(--secondary-color);
+            box-shadow: 0 4px 6px -1px rgba(255, 153, 51, 0.4);
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            background-color: #FF7F00; /* Darker orange */
+            transform: translateY(-2px);
+        }
+
+        .response-card {
+            background-color: var(--card-background);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-top: 16px;
+            overflow: hidden;
+            border: 1px solid #E5E7EB;
+        }
+
+        .window-header {
+            background-color: var(--primary-color);
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .window-header h3 {
+            color: white;
+            margin: 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .content {
+            padding: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        .loading-spinner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 24px;
+        }
+
+        .loading-spinner img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+        }
+
+        .toggle-tag-cloud {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 30px;
+            margin: 0 auto 5px auto; /* Padding lebih kecil */
+            border-radius: 0 0 30px 30px; /* Setengah lingkaran di bagian bawah */
+            position: relative;
+        }
+
+        .toggle-tag-cloud.up {
+            border-radius: 30px 30px 0 0; /* Setengah lingkaran di bagian atas */
+        }
+
+        .toggle-tag-cloud:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .toggle-tag-cloud i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-button {
+                display: block;
+            }
+
+            .mobile-menu {
+                display: none;
+                flex-direction: column;
+                gap: 10px;
+                position: absolute;
+                top: 60px;
+                right: 20px;
+                background-color: var(--primary-color);
+                padding: 10px;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            }
+
+            .mobile-menu.active {
+                display: flex;
+            }
+        }
+
+        h2 {
+            color: var(--primary-color);
+            display: block;
+            font-size: 2.5em;
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+            font-weight: 600;
+            text-align: center;
+            font-family: 'Merriweather', serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+          ol {
+            list-style-type: decimal;
+            padding-left: 15px;
+        }
+      
+              ul {
+            list-style-type: none;
+            padding-left: 25px;
+        }
+
+
+        ol li {
+            position: relative;
+            padding-left: 15px;
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+
+        ul li {
+            position: relative;
+            padding-left: 15px;
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+
+        ol li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 15%;
+            width: 5px;
+            height: 5px;
+            background-color: var(--secondary-color); /* Warna orange */
+            vertical-align: top;
+        }
+
+         ul li::before {
+            content: "";
+            position: absolute;
+            left: 25;
+            top: 15%;
+            width: 1px;
+            height: 1px;
+            background-color: var(--primary-color); /* Warna orange */
+            vertical-align: top;
+        }
+      .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--primary-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .bottom-bar a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .bottom-bar a i {
+            font-size: 20px;
+            margin-bottom: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .bottom-bar a:hover {
+            color: var(--secondary-color);
+        }
+
+        .bottom-bar a:hover i {
+            transform: translateY(-5px);
+        }
+
+        .copy-button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .copy-button:hover {
+            background-color: #FF7F00;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-white text-xl font-bold"><i class="fas fa-user-graduate"></i>GuruBot</a>
+            <button class="mobile-menu-button" onclick="toggleMenu()">
+                <i class="fas fa-bars text-white"></i>
+            </button>
+            <ul class="mobile-menu">
+                <li><a href="#" class="text-white">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 mt-16">
+        <div class="card bg-card-background p-6 rounded-lg shadow">
+            <h2>GuruBot</h2>
+            
+            <form id="ai-form">
+                <textarea 
+                    class="form-control" 
+                    id="prompt" 
+                    rows="4" 
+                    placeholder="Tuliskan topik materi (mis. fungsi pankreas, proses fotosintesis, dll)"
+                    required></textarea>
+
+                <button type="button" class="toggle-tag-cloud" onclick="toggleTagCloud()">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+
+                <div class="tag-cloud" id="tagCloud">
+                    <button type="button" class="tag" onclick="showAlert(1)">
+                        <i class="fas fa-bullseye"></i>
+                        Tujuan (TP)
+                    </button>
+                    <button type="button" class="tag" onclick="showAlert(2)">
+                        <i class="fas fa-tasks"></i>
+                        Aktivitas
+                    </button>
+                    <button type="button" class="tag" onclick="showAlert(3)">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        Cara Mengajar
+                    </button>
+                    <button type="button" class="tag" onclick="showAlert(4)">
+                        <i class="fas fa-clipboard-check"></i>
+                        Asesmen
+                    </button>
+                    <button type="button" class="tag" onclick="showAlert(5)">
+                        <i class="fas fa-lightbulb"></i>
+                        Pemantik
+                    </button>                    
+                    <button type="button" class="tag" onclick="showAlert(6)">
+                        <i class="fas fa-book"></i>
+                        Ringkasan
+                    <button type="button" class="tag" onclick="showAlert(7)">
+                        <i class="fas fa-book"></i>
+                        Tanya-Jawab (FAQ)
+                    </button>
+                    <button type="button" class="tag" onclick="showAlert(8)">
+                        <i class="fas fa-book"></i>
+                        Latihan
+                    </button>
+                </div>
+
+                <div id="loading" class="loading-spinner" style="display:none;">
+                    <img src="https://rumahguru.org/img/loadingtech.gif" alt="Loading">
+                    <p class="text-center text-gray-600">Sedang memproses...</p>
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-paper-plane"></i>
+                    Kirim
+                </button>
+            </form>
+
+            <div id="response" class="mt-6"></div>
+        </div>
+    </div>
+
+    <div class="bottom-bar">
+            <a href="#footer" onclick=""><i class="fas fa-arrow-down"></i>Ke Bawah</a>
+      <!--  <a href="#"><i class="fas fa-home"></i>Home</a>
+       <a href="#"><i class="fas fa-book"></i>Materi</a> -->
+        <a href="#"><i class="fas fa-question-circle"></i>Bantuan</a>
+        <a href="#"><i class="fas fa-user"></i>Profil</a>
+        <a href="#" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i>Ke Atas</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var tipe = "Jelaskan ";
+        var activeTag = null;
+
+        function showAlert(tagNumber) {
+            let msg = "";
+            if (tagNumber === 1) {
+                msg = "Tuliskan tujuan pembelajaran dan indikator belajar.";
+            } else if (tagNumber === 2) {
+                msg = "Tuliskan salah satu ide aktivitas pembelajaran yang runtut dimulai dari pengenalan-pemahaman konsep, pendalaman, penerapan/aplikasi dan ide materi lanjutan. Fokuskan pada masalah belajar atau kesalahan konsep yang sering dihadapi siswa.";
+            } else if (tagNumber === 3) {
+                msg = "Tuliskan cara mengajarkan materi menjadi mudah dipahami (sertakan contoh dan analogi jika perlu).";
+            } else if (tagNumber === 4) {
+                msg = "Tuliskan soal asesmen yang menantang dan dapat mengukur pengetahuan, keterampilan, kemampuan problem solving, literasi, numerasi siswa. (tulis judul  soal dengan teks tebal) ";
+            } else if (tagNumber === 5) {
+                msg = "Tuliskan 5 pertanyaan yang menggugah dan memantik perhatian dan motivasi siswa dalam mempelajari materi/topik pelajaran(buat pertanyaannya ringkas jelas dengan teks tebal).";
+            } else if (tagNumber === 6) {
+                msg = "Jelaskan ringkasan materi/topik dengan ringkas dan sejelas-jelasnya dari konsep dasar, contoh dan analogi.";
+            }
+                else if (tagNumber === 7) {
+                 msg = "Tuliskan pertanyaan yang sering diajukan siswa ttg topik materi pembelajaran (dengan format teks tebal) dan tuliskan jawabannya.tulis nomor soalnya. ";
+
+            }
+
+             else if (tagNumber === 8) {
+                msg = "Buatkan 7 soal latihan untuk pengertian dan pemahaman. dengan format isi seperti study flashcard";
+
+             }
+
+
+            if (activeTag !== null) {
+                activeTag.classList.remove('active');
+            }
+            var tag = document.querySelector('.tag:nth-child(' + tagNumber + ')');
+            tag.classList.add('active');
+            activeTag = tag;
+            tipe = msg;
+            return msg;
+        }
+
+        function toggleMenu() {
+            document.querySelector('.mobile-menu').classList.toggle('active');
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleTagCloud() {
+            var tagCloud = document.getElementById('tagCloud');
+            var toggleButton = document.querySelector('.toggle-tag-cloud');
+            if (tagCloud.style.display === 'none' || tagCloud.style.display === '') {
+                tagCloud.style.display = 'flex';
+                toggleButton.innerHTML = '<i class="fas fa-chevron-up"></i>';
+                toggleButton.classList.add('up'); // Setengah lingkaran di atas
+            } else {
+                tagCloud.style.display = 'none';
+                toggleButton.innerHTML = '<i class="fas fa-chevron-down"></i>';
+                toggleButton.classList.remove('up'); // Setengah lingkaran di bawah
+            }
+        }
+
+        $(document).ready(function() {
+            const url = "https://api.cerebras.ai/v1/chat/completions";
+            const apiKey = "csk-d3rmj2fyyr6cffe62xhpjkxy5d4fpvyftj5jh29hdhhcrmn2";
+            const model = "llama3.1-70b";
+
+            $('#ai-form').submit(function(e) {
+                e.preventDefault();
+                var prompt = $('#prompt').val();
+                $("#loading").show();
+
+                $.ajax({
+                    url: url,
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + apiKey,
+                        "Content-Type": "application/json"
+                    },
+                    data: JSON.stringify({
+                        model: model,
+                        temperature: 0.7,
+                        max_tokens: 1500,
+                        messages: [
+                            { 
+                                "role": "system", 
+                                "content": "You are a experienced teacher and helpful assistant. you will answer in clear concise and comprehensive answer."
+                            },
+                            {  
+                                "role": "user",
+                                "content": tipe + prompt + '. Jawablah dengan teks bahasa Indonesia. tuliskan judul singkat.)'
+                            }
+                        ]
+                    }),
+                    success: function(response) {
+                        const message = response.choices[0].message;
+                        const htmlText = window.markdownit().render(message.content);
+                        const botMessageHtml = htmlText.replace("```html", "");
+                        
+                        var newElement = $(`
+                            <div class="response-card">
+                                <div class="window-header">
+                                    <h3><i class="fas fa-robot"></i> AI Response</h3>
+                                    <button class="close-btn" onclick="deleteElement(this)">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div class="content">${botMessageHtml}</div>
+                                <button class="copy-button" onclick="copyToClipboard(this)" align="center">
+                                    <i class="fas fa-copy"></i> Salin
+                                </button><br>
+                            </div>
+                        `);
+                        
+                        $('#response').append(newElement);
+                        $("#loading").hide();
+                        window.scrollTo({ 
+                            top: document.body.scrollHeight, 
+                            behavior: "smooth" 
+                        });
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        $('#response').append(`
+                            <div class="response-card">
+                                <div class="window-header" style="background-color: #EF4444;">
+                                    <h3><i class="fas fa-exclamation-triangle"></i> Error</h3>
+                                </div>
+                                <div class="content">
+                                    <p>Maaf, terjadi kesalahan: ${errorThrown}</p>
+                                </div>
+                            </div>
+                        `);
+                        $("#loading").hide();
+                    }
+                });
+            });
+        });
+
+        function deleteElement(button) {
+            $(button).closest('.response-card').fadeOut(300, function() {
+                $(this).remove();
+            });
+        }
+
+        function copyToClipboard(button) {
+            const content = $(button).siblings('.content').text();
+            navigator.clipboard.writeText(content).then(function() {
+                alert('Teks berhasil disalin ke clipboard!');
+            }, function(err) {
+                alert('Gagal menyalin teks: ', err);
+            });
+        }
+
+    function createResponseCard(title, konten) {
+    var newElement = $(`
+        <div class="response-card">
+            <div class="window-header">
+                <h3><i class="fas fa-robot"></i> ${title}</h3>
+                <button class="close-btn" onclick="deleteElement(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="content">${konten}</div>
+            <button class="copy-button" onclick="copyToClipboard(this)" align="center">
+                <i class="fas fa-copy"></i> Salin
+            </button><br>
+        </div>
+    `);
+
+    $('#response').append(newElement);
+}
+
+        window.onscroll = function() {
+            const bottomBar = document.querySelector('.bottom-bar');
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                bottomBar.style.display = 'flex';
+            } else {
+                bottomBar.style.display = 'flex'; /* Tetap tampilkan bottom bar */
+            }
+        };
+    </script>
+    <p id="footer"><br>mtamim.com</p>
+</body>
+</html>
