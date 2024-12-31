@@ -432,6 +432,10 @@
                         <i class="fas fa-book"></i>
                         Latihan
                     </button>
+                    <button type="button" class="tag" onclick="showAlert(9)">
+                        <i class="fas fa-book"></i>
+                        Glosarium
+                    </button>
                 </div>
 
                 <div id="loading" class="loading-spinner" style="display:none;">
@@ -488,6 +492,10 @@
 
              else if (tagNumber === 8) {
                 msg = "Buatkan 7 soal latihan untuk pengertian dan pemahaman. dengan format isi seperti study flashcard";
+
+             }
+                 else if (tagNumber === 9) {
+                msg = "Buatkan glosarium penting yang merupakan konsep inti dari topik materi.";
 
              }
 
