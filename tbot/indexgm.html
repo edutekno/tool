@@ -492,9 +492,11 @@
 
              else if (tagNumber === 8) {
                 msg = "Buatkan 7 soal latihan untuk pengertian dan pemahaman. dengan format isi seperti study flashcard";
-
              }
- 
+             else if (tagNumber === 9) {
+                msg = "Buatkan glosarium penting terkait materi/topik.";
+             }
+
 
             if (activeTag !== null) {
                 activeTag.classList.remove('active');
